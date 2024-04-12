@@ -33,6 +33,7 @@ export default function MobileNavigation() {
             {NAV_ITEMS.map((item) => (
               <Link
                 href={item.href}
+                key={item.title}
                 className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
               >
                 <Icon
