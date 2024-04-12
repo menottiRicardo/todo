@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export function getTimeOfDay() {
   const currentHour = new Date().getHours();
 
@@ -10,4 +12,8 @@ export function getTimeOfDay() {
   } else {
     return 'night';
   }
+}
+
+export function formatDate(date: Date, format: string) {
+  return dayjs(date).format(format);
 }
