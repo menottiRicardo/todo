@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
+import useFormErrors from '@/hooks/useFormErrors';
 
 export interface FormData extends z.infer<typeof insertTodoSchema> {
   dueDate: Date | undefined;
@@ -33,10 +34,11 @@ export default function NewTodoForm({
     },
   });
 
+  const errors = useFormErrors<FormData>(form.formState.errors);
+
   const onSubmit = async (values: z.infer<typeof insertTodoSchema>) => {
     try {
-      console.log('submitting', values);
-      const [res, error] = await createTodo(values);
+      const [_, error] = await createTodo(values);
       if (error) {
         return console.error('Error creating todo:', error);
       }
@@ -45,8 +47,6 @@ export default function NewTodoForm({
       console.error('Error creating todo:', error);
     }
   };
-
-  const errors = form.formState.errors;
 
   return (
     <Form {...form}>
@@ -107,6 +107,12 @@ export default function NewTodoForm({
           </Button>
         </div>
       </form>
+      {errors?.map((err) => (
+        <p className='text-xs text-red-800'>
+          <span className='font-medium uppercase'>{err.field} </span>
+          {err.message}
+        </p>
+      ))}
     </Form>
   );
 }

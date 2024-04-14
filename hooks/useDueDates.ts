@@ -1,3 +1,15 @@
+/**
+ * A custom hook that provides utilities for managing due dates.
+ *
+ * @param setDueDate - A function to set the due date.
+ * @returns An object with the following properties:
+ *   - today: The current day of the week.
+ *   - tomorrow: The day of the week for tomorrow.
+ *   - nextWeek: The day, month, and date for next week.
+ *   - setToday: A function to set the due date to today.
+ *   - setTomorrow: A function to set the due date to tomorrow.
+ *   - setNextWeek: A function to set the due date to next week.
+ */
 import dayjs from 'dayjs';
 
 function useDueDates(setDueDate: (date: Date) => void) {

@@ -78,7 +78,12 @@ export const todos = pgTable('todo', {
   updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),
 });
 
-export const insertTodoSchema = createInsertSchema(todos);
+// export const insertTodoSchema = createInsertSchema(todos);
+
+export const insertTodoSchema = createInsertSchema(todos, {
+  name: (schema) => schema.name.min(2).max(50),
+  
+});
 
 export const lists = pgTable('list', {
   id: uuid('uuid').notNull().primaryKey().defaultRandom(),
