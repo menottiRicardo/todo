@@ -1,9 +1,5 @@
 'use client';
-import {
-  Calendar as CalendarIcon,
-  CalendarPlus,
-  Sun
-} from 'lucide-react';
+import { Calendar as CalendarIcon, CalendarPlus, Sun } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,10 +15,15 @@ import {
 import { useState } from 'react';
 import useDueDates from '@/hooks/useDueDates';
 import { Calendar } from '@/components/ui/calendar';
-import { formatDate } from '@/utils/time';
+import { formatDate } from 'date-fns';
 
-export default function DueDateDropdown() {
-  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
+export default function DueDateDropdown({
+  setDueDate,
+  dueDate,
+}: {
+  setDueDate: (date: Date) => void;
+  dueDate: Date | undefined;
+}) {
   const [open, setIsOpen] = useState(false);
 
   const { today, tomorrow, nextWeek, setToday, setTomorrow, setNextWeek } =

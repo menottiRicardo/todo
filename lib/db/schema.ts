@@ -5,7 +5,9 @@ import {
   primaryKey,
   integer,
   boolean,
+  uuid,
 } from 'drizzle-orm/pg-core';
+import { createInsertSchema } from 'drizzle-zod';
 import type { AdapterAccount } from 'next-auth/adapters';
 
 export const users = pgTable('user', {
@@ -61,13 +63,40 @@ export const verificationTokens = pgTable(
 );
 
 export const todos = pgTable('todo', {
-  id: integer('id').notNull().primaryKey(),
+  id: uuid('uuid').notNull().primaryKey().defaultRandom(),
+  listId: uuid('listId')
+    .notNull()
+    .references(() => lists.id, { onDelete: 'cascade' }),
   userId: text('userId')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  description: text('description').notNull(),
+  name: text('name').notNull(),
+  description: text('description'),
   isRecurring: boolean('isRecurring').default(false),
   dueDate: timestamp('dueDate'),
   createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
   updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),
 });
+
+export const insertTodoSchema = createInsertSchema(todos);
+
+export const lists = pgTable('list', {
+  id: uuid('uuid').notNull().primaryKey().defaultRandom(),
+  userId: text('userId')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  title: text('title').notNull(),
+});
+
+export const taskCompletions = pgTable(
+  'taskCompletion',
+  {
+    todoId: uuid('todoId')
+      .notNull()
+      .references(() => todos.id, { onDelete: 'cascade' }),
+    completionDate: timestamp('completionDate', { mode: 'date' }).notNull(),
+  },
+  (tc) => ({
+    primaryKey: primaryKey(tc.todoId, tc.completionDate),
+  })
+);

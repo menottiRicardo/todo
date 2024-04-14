@@ -1,20 +1,5 @@
-import DueDateDropdown from './due-date-dropdown';
+import NewTodo from '@/components/todos/new';
 
-export default function DropdownMenuDemo() {
-  return (
-    <form>
-      <input
-        placeholder="Task name"
-        className="text-xl font-medium w-full bg-transparent outline-none border-none"
-      />
-      <input
-        placeholder="Description"
-        className="w-full font-light bg-transparent outline-none border-none"
-      />
-      <div className="flex gap-4 mt-4">
-        <DueDateDropdown />
-        <DueDateDropdown />
-      </div>
-    </form>
-  );
+export default async function NewTodoPage() {
+  return <NewTodo />;
 }

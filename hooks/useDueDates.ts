@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction } from 'react';
 
-function useDueDates(setDueDate: Dispatch<SetStateAction<Date | undefined>>) {
+function useDueDates(setDueDate: (date: Date) => void) {
   const today = dayjs();
   const tomorrow = today.add(1, 'day');
   const nextWeek = today.add(7, 'day');

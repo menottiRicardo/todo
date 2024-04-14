@@ -2,8 +2,8 @@
 
 This is early development version. I am currently considering:
 
-- [ ] Basic layout
-- [ ] Create task
+- [x] Basic layout
+- [x] Create task
 - [ ] Edit Task 
 - [ ] Complete Tasks
 - [ ] Ability to handle lists

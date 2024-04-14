@@ -1,7 +1,7 @@
 import { Task } from '@/components/taks';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
-import { getTimeOfDay } from '@/utils/time';
+import { getTimeOfDay } from '@/lib/utils';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -27,8 +27,8 @@ export default async function Home() {
           <h3 className="font-light text-secondary py-2">Today, {today}</h3>
         </div>
         <div id="header-action">
-          <Link href="/todo/new" aria-label='Create a new task' passHref>
-            <Button>New</Button>
+          <Link href="/todo/new" aria-label='Create a new task'>
+            <Button >New</Button>
           </Link>
         </div>
       </div>
