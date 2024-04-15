@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Hash, ListPlus, ListTodo } from 'lucide-react';
+import { Hash, ListPlus, ListTodo, Share2 } from 'lucide-react';
 
 import MobileNavigation from '@/components/sidebar/mobile';
 import { NAV_ITEMS, PAGE_TITLE } from '@/components/sidebar/constants';
@@ -30,7 +30,6 @@ export default async function DashboardLayout({
   if (error) {
     return null;
   }
-  console.log(lists);
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -57,20 +56,35 @@ export default async function DashboardLayout({
 
               <div className="flex text-base justify-between items-center mt-4 mb-2 text-secondary/80">
                 <span>My Lists</span>
-                <Link href={'/lists/new'} className="cursor-pointer hover:text-primary ease-out duration-150">
+                <Link
+                  href={'/lists/new'}
+                  className="cursor-pointer hover:text-primary ease-out duration-150"
+                >
                   <ListPlus />
                 </Link>
               </div>
               <Suspense fallback={<div>Loading...</div>}>
                 {lists.map((list) => (
-                  <Link
-                    href={`lists/${list.id}`}
+                  <div
+                    className="flex items-center justify-between rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary group"
                     key={list.id}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   >
-                    <Hash className="h-4 w-4" />
-                    {list.title}
-                  </Link>
+                    <Link
+                      href={`lists/${list.id}`}
+                      className="flex items-center gap-3"
+                    >
+                      <Hash className="h-4 w-4" />
+                      {list.title}
+                    </Link>
+                    <div className="hidden group-hover:inline">
+                      <Link
+                        href={`/lists/invite/${list.id}`}
+                        className="flex items-center gap-3"
+                      >
+                        <Share2 className="h-4 w-4 cursor-pointer" />
+                      </Link>
+                    </div>
+                  </div>
                 ))}
               </Suspense>
             </nav>

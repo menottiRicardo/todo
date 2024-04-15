@@ -75,7 +75,6 @@ export const todos = pgTable('todo', {
   updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),
 });
 
-
 export const insertTodoSchema = createInsertSchema(todos, {
   name: (schema) => schema.name.min(2).max(50),
 });
@@ -83,7 +82,7 @@ export const insertTodoSchema = createInsertSchema(todos, {
 export const lists = pgTable('list', {
   id: uuid('uuid').notNull().primaryKey().defaultRandom(),
   title: text('title').notNull(),
-  ownerId: uuid('ownerId')
+  ownerId: uuid('ownerId'),
 });
 
 export const insertListSchema = createInsertSchema(lists, {
@@ -105,9 +104,15 @@ export const userListLink = pgTable(
   })
 );
 
-export const taskCompletions = pgTable('taskCompletion', {
-  todoId: uuid('todoId').notNull().references(() => todos.id, { onDelete: 'cascade' }),
-  completionDate: timestamp('completionDate', { mode: 'date' }).notNull(),
-}, (tc) => ({
-  primaryKey: primaryKey(tc.todoId, tc.completionDate), // Simplified primary key
-}));
+export const taskCompletions = pgTable(
+  'taskCompletion',
+  {
+    todoId: uuid('todoId')
+      .notNull()
+      .references(() => todos.id, { onDelete: 'cascade' }),
+    completionDate: timestamp('completionDate', { mode: 'date' }).notNull(),
+  },
+  (tc) => ({
+    primaryKey: primaryKey(tc.todoId, tc.completionDate), // Simplified primary key
+  })
+);
