@@ -3,10 +3,16 @@
 import db from '@/lib/db';
 import { and, eq, gte, lt, notExists } from 'drizzle-orm';
 import { TaskCompletion, Todo } from './types';
-import { lists, taskCompletions, todos, userListLink, users } from '@/lib/db/schema';
+import {
+  lists,
+  taskCompletions,
+  todos,
+  userListLink,
+  users,
+} from '@/lib/db/schema';
 import dayjs from 'dayjs';
 import { List } from '../lists/types';
-import GenerateDefault from './generate-default';
+import GenerateDefaultTodos from './generate-default';
 
 export interface TodoWithList {
   todo: Todo;
@@ -28,6 +34,7 @@ export const getTodos = async (
 > => {
   today = today.startOf('day');
   const dayAfterTomorrow = today.add(2, 'day');
+
   try {
     const pendingTasksQuery = db
       .select()
@@ -47,6 +54,41 @@ export const getTodos = async (
           lt(todos.dueDate, dayAfterTomorrow.toDate())
         )
       );
+    if (data.length === 0) {
+      console.log('no data');
+      const user = await db.select().from(users).where(eq(users.id, userId));
+      if (!user[0].verified) {
+        console.log('not verified');
+
+        await GenerateDefaultTodos(userId);
+        const data = await db
+          .select()
+          .from(todos)
+          .innerJoin(lists, eq(lists.id, todos.listId))
+          .innerJoin(userListLink, eq(userListLink.listId, lists.id))
+          .where(
+            and(
+              eq(userListLink.userId, userId),
+              notExists(pendingTasksQuery),
+              gte(todos.dueDate, today.toDate()),
+              lt(todos.dueDate, dayAfterTomorrow.toDate())
+            )
+          );
+        // separate data by dates
+        const todayTodos: TodoWithList[] = [];
+        const tomorrowTodos: TodoWithList[] = [];
+
+        data.forEach((item) => {
+          if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {
+            todayTodos.push({ todo: item.todo, list: item.list });
+          } else {
+            tomorrowTodos.push({ todo: item.todo, list: item.list });
+          }
+        });
+
+        return [{ today: todayTodos, tomorrow: tomorrowTodos }, null];
+      }
+    }
 
     // separate data by dates
     const todayTodos: TodoWithList[] = [];
