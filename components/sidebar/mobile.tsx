@@ -12,10 +12,10 @@ import ThemeToggle from '../theme-toggle';
 
 export default function MobileNavigation() {
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:hidden">
+    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 xl:hidden">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+          <Button variant="outline" size="icon" className="shrink-0 xl:hidden">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
