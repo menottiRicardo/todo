@@ -25,4 +25,4 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 
-export const PAGE_TITLE = "Todo"
+export const PAGE_TITLE = "Beast List"

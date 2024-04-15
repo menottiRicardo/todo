@@ -40,7 +40,6 @@ export default async function DashboardLayout({
               <ListTodo className="h-6 w-6" />
               <span className="">{PAGE_TITLE}</span>
             </Link>
-            <ThemeToggle />
           </div>
           <div className="flex-1 border-b">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -77,10 +76,7 @@ export default async function DashboardLayout({
                       <Hash className="h-4 w-4" />
                       {list.title}
                       {list.ownerId !== user?.id && (
-                        <Badge
-                          className="text-xs"
-                          variant="secondary"
-                        >
+                        <Badge className="text-xs" variant="secondary">
                           Shared
                         </Badge>
                       )}
@@ -97,6 +93,9 @@ export default async function DashboardLayout({
                 ))}
               </Suspense>
             </nav>
+          </div>
+          <div className="p-2 flex items-center justify-between">
+            <ThemeToggle />
           </div>
         </div>
       </div>
