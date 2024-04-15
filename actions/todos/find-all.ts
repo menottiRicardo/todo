@@ -20,11 +20,12 @@ export interface TodoWithList {
  * @returns A tuple containing an object with two arrays, one for todos due today and one for todos due tomorrow, and a nullable error string.
  */
 export const getTodos = async (
-  userId: string
+  userId: string,
+  today: dayjs.Dayjs
 ): Promise<
   [{ today: TodoWithList[]; tomorrow: TodoWithList[] }, string | null]
 > => {
-  const today = dayjs().startOf('day');
+  today = today.startOf('day');
   const dayAfterTomorrow = today.add(2, 'day');
   try {
     const pendingTasksQuery = db

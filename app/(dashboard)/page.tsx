@@ -27,7 +27,7 @@ export default async function Home() {
   const timeOfDay = getTimeOfDay();
   const todayDate = dayjs().format('ddd D MMMM YYYY');
 
-  const [{ today, tomorrow }, error] = await getTodos(user.id as string);
+  const [{ today, tomorrow }, error] = await getTodos(user.id as string, dayjs());
 
   console.log(today, tomorrow);
   if (error) {
