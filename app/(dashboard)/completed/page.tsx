@@ -1,4 +1,4 @@
-import { getTodos } from '@/actions/todos/find-all';
+import { getCompletedTodos } from '@/actions/todos/get-completed';
 import { Task } from '@/components/task';
 import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const session = await auth();
@@ -21,10 +21,10 @@ export default async function Home() {
   const timeOfDay = getTimeOfDay();
   const today = dayjs().format('ddd D MMMM YYYY');
 
-  const [todos, error] = await getTodos(user.id as string);
+  const [completedTodos, error] = await getCompletedTodos(user.id as string);
 
   if (error) {
-    return null;
+    return <div> something went wrong</div>;
   }
   return (
     <div>
@@ -47,13 +47,14 @@ export default async function Home() {
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <div id="tasks-container" className="mt-10 flex flex-col gap-4">
-          {todos.map((todo) => (
+          {completedTodos.map((todo) => (
             <Task
               key={todo.todo.id}
               name={todo.todo.name}
               description={todo.todo.name}
-              list={todo.list}
+              list={todo?.list}
               id={todo.todo.id}
+              completed={true}
             />
           ))}
         </div>

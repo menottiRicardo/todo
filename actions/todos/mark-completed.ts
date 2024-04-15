@@ -12,10 +12,15 @@ import { revalidatePath } from 'next/cache';
  */
 export const completeTask = async (todoId: string) => {
   const today = new Date();
-  await db.insert(taskCompletions).values({
-    todoId,
-    completionDate: today,
-  });
 
-  revalidatePath('/');
+  try {
+    const res = await db.insert(taskCompletions).values({
+      todoId,
+      completionDate: today,
+    });
+    revalidatePath('/');
+    return [res, null];
+  } catch (error) {
+    return [{}, error];
+  }
 };

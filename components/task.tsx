@@ -3,22 +3,27 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from './ui/badge';
 import { List } from '@/actions/lists';
 import { completeTask } from '@/actions/todos/mark-completed';
+import { useState } from 'react';
 
 export function Task({
   name,
   list,
   description,
   id,
+  completed = false
 }: {
   name: string;
   list: List;
   description?: string;
   id: string;
+  completed?: boolean;
 }) {
+
+  const [isCompleted, setIsCompleted] = useState(completed)
   return (
     <div className="">
       <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-        <Checkbox checked={false} onCheckedChange={() => completeTask(id)} />
+        <Checkbox checked={isCompleted} onCheckedChange={() => completeTask(id)} />
         <div className="space-y-2 leading-none">
           <span>{name}</span>
 
