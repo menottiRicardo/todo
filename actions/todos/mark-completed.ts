@@ -20,7 +20,7 @@ export const completeTask = async (todoId: string) => {
     });
     revalidatePath('/');
     return [res, null];
-  } catch (error) {
-    return [{}, error];
+  } catch (error: any) {
+    return [{}, error?.message];
   }
 };

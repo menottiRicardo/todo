@@ -25,7 +25,7 @@ export const unCompleteTask = async (todoId: string, completionDate: Date) => {
       .returning();
     revalidatePath('/');
     return [res, null];
-  } catch (error) {
-    return [{}, error];
+  } catch (error: any) {
+    return [{}, error?.message];
   }
 };
