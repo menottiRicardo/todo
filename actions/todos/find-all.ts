@@ -51,6 +51,11 @@ export const getTodos = async (
     const tomorrowTodos: TodoWithList[] = [];
 
     data.forEach((item) => {
+      console.log(
+        item.todo.dueDate,
+        today,
+        dayjs(item.todo.dueDate).isSame(today, 'day')
+      );
       if (today.isSame(item.todo.dueDate)) {
         todayTodos.push({ todo: item.todo, list: item.list });
       } else {
