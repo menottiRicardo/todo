@@ -37,12 +37,10 @@ export default async function Home() {
           <h1 className="font-medium text-xl">
             Good {timeOfDay}, {user?.name}!
           </h1>
-          <h3 className="font-light text-secondary py-2">Today, {today}</h3>
-        </div>
-        <div id="header-action">
-          <Link href="/todo/new" aria-label="Create a new task">
-            <Button>New</Button>
-          </Link>
+          <h3 className="font-light text-secondary py-2">
+            These are your <strong className="font-medium text-primary">completed</strong>{' '}
+            Todos as today, {today}
+          </h3>
         </div>
       </div>
       <Suspense fallback={<div>Loading...</div>}>

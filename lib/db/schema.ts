@@ -82,7 +82,6 @@ export const todos = pgTable('todo', {
 
 export const insertTodoSchema = createInsertSchema(todos, {
   name: (schema) => schema.name.min(2).max(50),
-  
 });
 
 export const lists = pgTable('list', {
@@ -91,6 +90,10 @@ export const lists = pgTable('list', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
+});
+
+export const insertListSchema = createInsertSchema(lists, {
+  title: (schema) => schema.title.min(2).max(50),
 });
 
 export const taskCompletions = pgTable('taskCompletion', {

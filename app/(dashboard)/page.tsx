@@ -40,7 +40,7 @@ export default async function Home() {
           <h3 className="font-light text-secondary py-2">Today, {today}</h3>
         </div>
         <div id="header-action">
-          <Link href="/todo/new" aria-label="Create a new task">
+          <Link href="/todos/new" aria-label="Create a new task">
             <Button>New</Button>
           </Link>
         </div>

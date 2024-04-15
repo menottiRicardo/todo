@@ -1,10 +1,10 @@
 import NewTodo from '@/components/todos/new';
-import NewTodoModal from './modal';
+import Modal from '@/components/ui/modal';
 
 export default function NewTodoModalPage() {
   return (
-    <NewTodoModal>
+    <Modal>
       <NewTodo />
-    </NewTodoModal>
+    </Modal>
   );
 }

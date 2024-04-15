@@ -4,7 +4,7 @@ import {
   DialogContent,
 } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
-export default function NewTodoModal({
+export default function Modal({
   children,
 }: {
   children: React.ReactNode;

@@ -15,8 +15,7 @@ export const createTodo = async (todo: z.infer<typeof insertTodoSchema>) => {
     const res = await db.insert(todos).values(todo);
     revalidatePath('/');
     return [res, null];
-  } catch (error) {
-    console.log('error', error);
-    return [{}, error];
+  } catch (error: any) {
+    return [null, error?.message];
   }
 };
