@@ -9,6 +9,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getUserLists } from '@/actions/lists';
 import { Suspense } from 'react';
+import { Badge } from '@/components/ui/badge';
 
 export default async function DashboardLayout({
   children,
@@ -75,6 +76,14 @@ export default async function DashboardLayout({
                     >
                       <Hash className="h-4 w-4" />
                       {list.title}
+                      {list.ownerId !== user?.id && (
+                        <Badge
+                          className="text-xs"
+                          variant="secondary"
+                        >
+                          Shared
+                        </Badge>
+                      )}
                     </Link>
                     <div className="hidden group-hover:inline">
                       <Link

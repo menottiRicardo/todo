@@ -29,15 +29,15 @@ export default function UsersComboBox({
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState(users);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-    setSearchTerm(searchTerm);
-    if (searchTerm.trim() === '') {
+  const handleSearch = (val:string) => {
+   
+    setSearchTerm(val);
+    if (val.trim() === '') {
       setFilteredUsers(users);
     } else {
       setFilteredUsers(
         users.filter((user) =>
-          user.name?.toLowerCase().includes(searchTerm.toLowerCase())
+          user.name?.toLowerCase().includes(val.toLowerCase())
         )
       );
     }
