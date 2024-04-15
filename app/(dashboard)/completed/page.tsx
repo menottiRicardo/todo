@@ -1,10 +1,9 @@
 import { getCompletedTodos } from '@/actions/todos/get-completed';
 import { Task } from '@/components/task';
-import { Button } from '@/components/ui/button';
+import Tasks from '@/components/tasks';
 import { auth } from '@/lib/auth';
 import { getTimeOfDay } from '@/lib/utils';
 import dayjs from 'dayjs';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -24,7 +23,7 @@ export default async function Home() {
   const [completedTodos, error] = await getCompletedTodos(user.id as string);
 
   if (error) {
-    return <div> something went wrong</div>;
+    return <div> something went wrong, error: {error}</div>;
   }
   return (
     <div>
@@ -38,23 +37,15 @@ export default async function Home() {
             Good {timeOfDay}, {user?.name}!
           </h1>
           <h3 className="font-light text-secondary py-2">
-            These are your <strong className="font-medium text-primary">completed</strong>{' '}
+            These are your{' '}
+            <strong className="font-medium text-primary">completed</strong>{' '}
             Todos as today, {today}
           </h3>
         </div>
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <div id="tasks-container" className="mt-10 flex flex-col gap-4">
-          {completedTodos.map((todo) => (
-            <Task
-              key={todo.todo.id}
-              name={todo.todo.name}
-              description={todo.todo.name}
-              list={todo?.list}
-              id={todo.todo.id}
-              completed={true}
-            />
-          ))}
+          <Tasks tasks={completedTodos} completed />
         </div>
       </Suspense>
     </div>

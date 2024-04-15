@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -16,7 +15,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const session = await auth();
@@ -66,7 +64,7 @@ export default async function Home() {
             {today.length > 0 ? (
               <Tasks tasks={today} />
             ) : (
-              <p>Congrats!, there's nothing more to do.</p>
+              <p>Congrats!, there s nothing more to do.</p>
             )}
           </div>
         </Suspense>
@@ -93,7 +91,7 @@ export default async function Home() {
                   />
                 ))
               ) : (
-                <p>There's nothing for tomorrow.</p>
+                <p>There{"'"}s nothing for tomorrow.</p>
               )}
             </div>
           </CardContent>

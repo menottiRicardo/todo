@@ -2,14 +2,15 @@
 
 import db from '@/lib/db';
 import { and, eq, gte, lt, notExists } from 'drizzle-orm';
-import { Todo } from './types';
+import { TaskCompletion, Todo } from './types';
 import { lists, taskCompletions, todos, userListLink } from '@/lib/db/schema';
-import { List } from '../lists';
 import dayjs from 'dayjs';
+import { List } from '../lists/types';
 
 export interface TodoWithList {
   todo: Todo;
   list: List;
+  taskCompletion?: TaskCompletion;
 }
 
 /**

@@ -2,8 +2,15 @@
 import React from 'react';
 import { Task } from './task';
 import { animated, useTransition } from '@react-spring/web';
+import { TodoWithList } from '@/actions/todos/find-all';
 
-const Tasks = ({ tasks }: any) => {
+const Tasks = ({
+  tasks,
+  completed = false,
+}: {
+  tasks: TodoWithList[];
+  completed?: boolean;
+}) => {
   const transitions = useTransition(tasks, {
     keys: (task) => task.todo.id,
     from: { opacity: 0, transform: 'translateY(-20px)' },
@@ -19,6 +26,8 @@ const Tasks = ({ tasks }: any) => {
         list={item.list}
         description={item.todo.description}
         id={item.todo.id}
+        completed={completed}
+        completionDate={item.taskCompletion?.completionDate}
       />
     </animated.div>
   ));

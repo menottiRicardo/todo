@@ -2,8 +2,6 @@
 import { useForm } from 'react-hook-form';
 import DueDateDropdown from './due-date-dropdown';
 import ListsComboBox from './lists-combo-box';
-import { List } from '@/actions/lists';
-import { createTodo } from '@/actions/todos';
 import { z } from 'zod';
 import { insertTodoSchema } from '@/lib/db/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
 import useFormErrors from '@/hooks/useFormErrors';
+import { createTodo } from '@/actions/todos/create';
+import { List } from '@/actions/lists/types';
 
 export interface FormData extends z.infer<typeof insertTodoSchema> {
   dueDate: Date | undefined;
@@ -29,8 +29,7 @@ export default function NewTodoForm({
       name: '',
       description: '',
       dueDate: undefined,
-      listId: lists.find((list) => list.title === 'Default')?.id ?? '',
-      userId,
+      listId: undefined,
     },
   });
 

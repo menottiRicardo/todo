@@ -4,12 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
 import useFormErrors from '@/hooks/useFormErrors';
-import { createList } from '@/actions/lists/create';
 import { User } from '@/actions/users/types';
 import { useState } from 'react';
 import UsersComboBox from './users-combo-box';
 import UserAvatar from './user-avatar';
-import { inviteToList } from '@/actions/lists';
+import { inviteToList } from '@/actions/lists/invite';
 
 export interface FormData {
   selectedUsersIds: string[];

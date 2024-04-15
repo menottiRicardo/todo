@@ -21,8 +21,8 @@ export const getUserLists = async (
       .leftJoin(userListLink, eq(lists.id, userListLink.listId))
       .where(eq(userListLink.userId, userId));
     return [data, null];
-  } catch (error) {
+  } catch (error:any) {
     console.error('Error fetching lists:', error);
-    return [[], error as string];
+    return [[], error.message];
   }
 };

@@ -7,9 +7,9 @@ import Icon from '@/components/ui/icon';
 import ThemeToggle from '@/components/theme-toggle';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { getUserLists } from '@/actions/lists';
 import { Suspense } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { getUserLists } from '@/actions/lists/find-all';
 
 export default async function DashboardLayout({
   children,

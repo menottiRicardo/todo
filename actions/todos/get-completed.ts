@@ -1,15 +1,9 @@
 import db from '@/lib/db';
-import { lists, taskCompletions, todos } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { lists, taskCompletions, todos, userListLink } from '@/lib/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import { Todo, TaskCompletion } from './types';
-import { List } from '../lists';
+import { List } from '../lists/types';
 
-/**
- * Retrieves a list of completed todos for the given user, along with their associated task completions and lists.
- *
- * @param userId - The ID of the user whose completed todos should be retrieved.
- * @returns A tuple containing an array of objects with the completed todo, its task completion, and the associated list, as well as a potential error message.
- */
 export const getCompletedTodos = async (
   userId: string
 ): Promise<
@@ -19,13 +13,14 @@ export const getCompletedTodos = async (
     const data = await db
       .select()
       .from(taskCompletions)
-      .where(eq(todos.userId, userId))
       .innerJoin(todos, eq(taskCompletions.todoId, todos.id))
       .innerJoin(lists, eq(todos.listId, lists.id))
-      .orderBy(taskCompletions.completionDate);
+      .innerJoin(userListLink, eq(userListLink.listId, lists.id))
+      .where(eq(userListLink.userId, userId))
+      .orderBy(desc(taskCompletions.completionDate));
     return [data, null];
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching lists:', error);
-    return [[], error as string];
+    return [[], error?.message];
   }
 };

@@ -6,7 +6,7 @@ This is early development version. I am currently considering:
 - [x] Create task
 - [ ] Edit Task 
 - [x] Complete Tasks
-- [ ] Ability to handle lists
+- [x] Ability to handle lists
 - [ ] Due dates with recurrence
 - [ ] Dnd
 - [ ] Slider

@@ -1,11 +1,12 @@
 'use client';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from './ui/badge';
-import { List } from '@/actions/lists';
 import { completeTask } from '@/actions/todos/mark-completed';
 import { useState } from 'react';
 import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
+import { List } from '@/actions/lists/types';
+import { unCompleteTask } from '@/actions/todos/unmark-completed';
 
 export function Task({
   name,
@@ -14,13 +15,15 @@ export function Task({
   id,
   completed = false,
   preview = false,
+  completionDate,
 }: {
   name: string;
   list: List;
-  description?: string;
+  description?: string | null;
   id: string;
   completed?: boolean;
   preview?: boolean;
+  completionDate?: Date;
 }) {
   const [isCompleted, setIsCompleted] = useState(completed);
   const [isExploding, setIsExploding] = useState(false);
@@ -35,20 +38,24 @@ export function Task({
     );
   }
 
-  const handleTaskCompletion = (id: string) => {
+  const handleTaskCompletion = async (id: string) => {
+    if (completed && completionDate) {
+      await unCompleteTask(id, completionDate);
+      return;
+    }
     setIsCompleted(true);
     setIsExploding(true);
-    setTimeout(() => completeTask(id), 1000);
+    setTimeout(async () => await completeTask(id), 1000);
   };
   return (
     <>
-      <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+      <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
         <Checkbox
           checked={isCompleted}
           onCheckedChange={() => handleTaskCompletion(id)}
         />
-        <div className="leading-none gap-2">
-          <span className='mb-2 mr-2'>{name}</span>
+        <div className="leading-none">
+          <span className="mb-2 mr-2">{name}</span>
 
           {description && (
             <p className="text-light text-secondary py-2">
