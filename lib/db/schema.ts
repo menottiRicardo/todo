@@ -93,15 +93,9 @@ export const lists = pgTable('list', {
   title: text('title').notNull(),
 });
 
-export const taskCompletions = pgTable(
-  'taskCompletion',
-  {
-    todoId: uuid('todoId')
-      .notNull()
-      .references(() => todos.id, { onDelete: 'cascade' }),
-    completionDate: timestamp('completionDate', { mode: 'date' }).notNull(),
-  },
-  (tc) => ({
-    primaryKey: primaryKey(tc.todoId, tc.completionDate),
-  })
-);
+export const taskCompletions = pgTable('taskCompletion', {
+  todoId: uuid('todoId').notNull().references(() => todos.id, { onDelete: 'cascade' }),
+  completionDate: timestamp('completionDate', { mode: 'date' }).notNull(),
+}, (tc) => ({
+  primaryKey: primaryKey(tc.todoId, tc.completionDate), // Simplified primary key
+}));

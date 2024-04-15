@@ -15,7 +15,7 @@ import {
 import { useState } from 'react';
 import useDueDates from '@/hooks/useDueDates';
 import { Calendar } from '@/components/ui/calendar';
-import { formatDate } from 'date-fns';
+import { formatDate } from '@/lib/utils';
 
 export default function DueDateDropdown({
   setDueDate,
