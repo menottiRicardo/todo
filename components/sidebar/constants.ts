@@ -1,4 +1,4 @@
-import dynamicIconImports from "lucide-react/dynamicIconImports";
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
 
 interface NavItem {
   href: string;
@@ -17,12 +17,6 @@ export const NAV_ITEMS: NavItem[] = [
     title: 'Completed',
     icon: 'circle-check-big',
   },
-  {
-    href: '/settings',
-    title: 'Settings',
-    icon: 'settings',
-  },
 ];
 
-
-export const PAGE_TITLE = "Beast List"
+export const PAGE_TITLE = 'Beast List';
