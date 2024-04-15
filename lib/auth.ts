@@ -15,7 +15,7 @@ export const config = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
 
-      const unprotectedPaths = ['/login'];
+      const unprotectedPaths = ['/login', '/welcome'];
 
       const isProtected = !unprotectedPaths.some((path) =>
         nextUrl.pathname.startsWith(path)
