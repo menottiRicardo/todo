@@ -13,6 +13,7 @@ import {
 import dayjs from 'dayjs';
 import { List } from '../lists/types';
 import GenerateDefaultTodos from './generate-default';
+import { revalidatePath } from 'next/cache';
 
 export interface TodoWithList {
   todo: Todo;
@@ -33,7 +34,7 @@ export const getTodos = async (
   [{ today: TodoWithList[]; tomorrow: TodoWithList[] }, string | null]
 > => {
   today = today.startOf('day');
-  const dayAfterTomorrow = today.add(2, 'day');
+  const dayAfterTomorrow = today.add(1, 'day');
 
   try {
     const pendingTasksQuery = db
@@ -55,38 +56,10 @@ export const getTodos = async (
         )
       );
     if (data.length === 0) {
-      console.log('no data');
       const user = await db.select().from(users).where(eq(users.id, userId));
       if (!user[0].verified) {
-        console.log('not verified');
-
-        await GenerateDefaultTodos(userId);
-        const data = await db
-          .select()
-          .from(todos)
-          .innerJoin(lists, eq(lists.id, todos.listId))
-          .innerJoin(userListLink, eq(userListLink.listId, lists.id))
-          .where(
-            and(
-              eq(userListLink.userId, userId),
-              notExists(pendingTasksQuery),
-              gte(todos.dueDate, today.toDate()),
-              lt(todos.dueDate, dayAfterTomorrow.toDate())
-            )
-          );
-        // separate data by dates
-        const todayTodos: TodoWithList[] = [];
-        const tomorrowTodos: TodoWithList[] = [];
-
-        data.forEach((item) => {
-          if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {
-            todayTodos.push({ todo: item.todo, list: item.list });
-          } else {
-            tomorrowTodos.push({ todo: item.todo, list: item.list });
-          }
-        });
-
-        return [{ today: todayTodos, tomorrow: tomorrowTodos }, null];
+        const res = (await GenerateDefaultTodos(userId)) as any;
+        return res;
       }
     }
 

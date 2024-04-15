@@ -23,7 +23,6 @@ export const getUserLists = async (
       .where(eq(userListLink.userId, userId));
 
     if (data.length === 0) {
-      console.log('no data');
       await GenerateDefaultLists(userId);
       const data = await db
         .select({ id: lists.id, title: lists.title, ownerId: lists.ownerId })

@@ -45,7 +45,11 @@ export default async function Home() {
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <div id="tasks-container" className="mt-10 flex flex-col gap-4">
-          <Tasks tasks={completedTodos} completed />
+          {completedTodos.length > 0 ? (
+            <Tasks tasks={completedTodos} completed />
+          ) : (
+            <p>Nothing here yet.</p>
+          )}
         </div>
       </Suspense>
     </div>
