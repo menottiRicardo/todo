@@ -54,6 +54,7 @@ export const getTodos = async (
       console.log(
         item.todo.dueDate,
         today,
+        today.isSame(item.todo.dueDate),
         today.isSame(dayjs(item.todo.dueDate))
       );
       if (today.isSame(item.todo.dueDate)) {
