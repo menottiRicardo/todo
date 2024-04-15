@@ -59,8 +59,8 @@ export const getTodos = async (
     });
 
     return [{ today: todayTodos, tomorrow: tomorrowTodos }, null];
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching lists:', error);
-    return [{ today: [], tomorrow: [] }, error as string];
+    return [{ today: [], tomorrow: [] }, error?.message];
   }
 };

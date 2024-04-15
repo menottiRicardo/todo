@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import useFormErrors from '@/hooks/useFormErrors';
 import { createTodo } from '@/actions/todos/create';
 import { List } from '@/actions/lists/types';
+import { Todo } from '@/actions/todos/types';
+import { updateTodo } from '@/actions/todos/update';
 
 export interface FormData extends z.infer<typeof insertTodoSchema> {
   dueDate: Date | undefined;
@@ -18,30 +20,42 @@ export interface FormData extends z.infer<typeof insertTodoSchema> {
 export default function NewTodoForm({
   lists,
   userId,
+  todo,
 }: {
   lists: List[];
   userId: string | undefined;
+  todo?: Todo;
 }) {
   const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(insertTodoSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      dueDate: undefined,
-      listId: undefined,
+      name: todo?.name || '',
+      description: todo?.description || '',
+      dueDate: todo?.dueDate || undefined,
+      listId: todo?.listId || undefined,
+      ownerId: userId as string,
     },
   });
 
   const errors = useFormErrors<FormData>(form.formState.errors);
 
   const onSubmit = async (values: z.infer<typeof insertTodoSchema>) => {
-    const [_, error] = await createTodo(values);
-    if (error) {
-      form.setError('root', { message: error });
-      return console.error('Error creating todo:', error);
+    if (todo) {
+      const [_, updateError] = await updateTodo(values, todo.id);
+      router.back();
+      if (updateError) {
+        form.setError('root', { message: updateError });
+        return console.error('Error updating todo:', updateError);
+      }
+    } else {
+      const [_, error] = await createTodo(values);
+      router.back();
+      if (error) {
+        form.setError('root', { message: error });
+        return console.error('Error creating todo:', error);
+      }
     }
-    router.back();
   };
 
   return (
@@ -99,7 +113,7 @@ export default function NewTodoForm({
             selectedListId={form.watch('listId')}
           />
           <Button size="sm" type="submit">
-            Create
+            {todo ? 'Edit' : 'Create'}
           </Button>
         </div>
       </form>

@@ -13,7 +13,7 @@ export const NAV_ITEMS: NavItem[] = [
     icon: 'home',
   },
   {
-    href: '/completed',
+    href: '/todos/completed',
     title: 'Completed',
     icon: 'circle-check-big',
   },

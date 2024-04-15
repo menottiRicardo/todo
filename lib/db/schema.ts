@@ -70,6 +70,7 @@ export const todos = pgTable('todo', {
   name: text('name').notNull(),
   description: text('description'),
   isRecurring: boolean('isRecurring').default(false),
+  ownerId: uuid('ownerId'),
   dueDate: timestamp('dueDate'),
   createdAt: timestamp('createdAt', { mode: 'date' }).defaultNow(),
   updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),

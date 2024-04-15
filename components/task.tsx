@@ -7,6 +7,9 @@ import useWindowSize from 'react-use/lib/useWindowSize';
 import Confetti from 'react-confetti';
 import { List } from '@/actions/lists/types';
 import { unCompleteTask } from '@/actions/todos/unmark-completed';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export function Task({
   name,
@@ -29,6 +32,8 @@ export function Task({
   const [isExploding, setIsExploding] = useState(false);
   const { width, height } = useWindowSize();
 
+  const router = useRouter();
+
   if (preview) {
     return (
       <div className="flex flex-row items-start border-b gap-4 pb-2 last:border-b-0">
@@ -38,14 +43,21 @@ export function Task({
     );
   }
 
+  const isTaskCompleted = completed && completionDate;
+
   const handleTaskCompletion = async (id: string) => {
-    if (completed && completionDate) {
+    if (isTaskCompleted) {
       await unCompleteTask(id, completionDate);
       return;
     }
     setIsCompleted(true);
     setIsExploding(true);
     setTimeout(async () => await completeTask(id), 1000);
+  };
+
+  const handleNavigation = () => {
+    if (isTaskCompleted) return null;
+    router.push(`/todos/edit/${id}`);
   };
   return (
     <>
@@ -54,16 +66,14 @@ export function Task({
           checked={isCompleted}
           onCheckedChange={() => handleTaskCompletion(id)}
         />
-        <div className="leading-none">
+        <div
+          className={cn({ 'cursor-pointer': !isTaskCompleted }, 'leading-none')}
+          onClick={handleNavigation}
+        >
           <span className="mb-2 mr-2">{name}</span>
 
           {description && (
-            <p className="text-light text-secondary py-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
-              odio asperiores recusandae voluptates repellat, sapiente
-              consequuntur numquam obcaecati reprehenderit illo ducimus. Quia
-              non ullam excepturi quis maiores, earum quaerat et?
-            </p>
+            <p className="text-light text-secondary py-2">{description}</p>
           )}
 
           <Badge variant="outline">#{list.title}</Badge>

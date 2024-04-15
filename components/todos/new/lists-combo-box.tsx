@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useState } from 'react';
-import { List } from '@/actions/lists';
+import { List } from '@/actions/lists/types';
 
 export default function ListsComboBox({
   lists,
