@@ -54,11 +54,12 @@ export const getTodos = async (
     data.forEach((item) => {
       console.log(
         item.todo.dueDate,
-        today,
+        today.toDate(),
         today.isSame(item.todo.dueDate),
-        today.isSame(dayjs(item.todo.dueDate))
+        today.isSame(dayjs(item.todo.dueDate)),
+        today.toDate() === item.todo.dueDate
       );
-      if (today.isSame(item.todo.dueDate)) {
+      if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {
         console.log('pushing', item);
         todayTodos.push({ todo: item.todo, list: item.list });
       } else {
@@ -72,3 +73,17 @@ export const getTodos = async (
     return [{ today: [], tomorrow: [] }, error?.message];
   }
 };
+
+function areDatesEqual(date1: Date, date2: Date) {
+  // Extract the day, month, and year from both dates
+  const day1 = date1.getDate();
+  const month1 = date1.getMonth();
+  const year1 = date1.getFullYear();
+
+  const day2 = date2.getDate();
+  const month2 = date2.getMonth();
+  const year2 = date2.getFullYear();
+
+  // Compare the extracted day, month, and year
+  return day1 === day2 && month1 === month2 && year1 === year2;
+}

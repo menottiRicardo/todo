@@ -29,7 +29,7 @@ export default async function Home() {
 
   const [{ today, tomorrow }, error] = await getTodos(user.id as string, dayjs());
 
-  console.log(today, tomorrow);
+  // console.log(today, tomorrow);
   if (error) {
     return (
       <div>
