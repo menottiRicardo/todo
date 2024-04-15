@@ -3,7 +3,7 @@
 import db from '@/lib/db';
 import { and, eq, notExists } from 'drizzle-orm';
 import { Todo } from './types';
-import { lists, taskCompletions, todos } from '@/lib/db/schema';
+import { lists, taskCompletions, todos, userListLink } from '@/lib/db/schema';
 import { List } from '../lists';
 
 /**
@@ -24,8 +24,11 @@ export const getTodos = async (
     const data = await db
       .select()
       .from(todos)
-      .where(and(eq(todos.userId, userId), notExists(pendingTasksQuery)))
-      .innerJoin(lists, eq(lists.id, todos.listId));
+      .innerJoin(lists, eq(lists.id, todos.listId))
+      .innerJoin(userListLink, eq(userListLink.listId, lists.id))
+      .where(
+        and(eq(userListLink.userId, userId), notExists(pendingTasksQuery))
+      );
     return [data, null];
   } catch (error) {
     console.error('Error fetching lists:', error);

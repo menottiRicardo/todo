@@ -22,14 +22,14 @@ export default function NewListForm({
     resolver: zodResolver(insertListSchema),
     defaultValues: {
       title: '',
-      userId,
+      ownerId: userId as string,
     },
   });
 
   const errors = useFormErrors<FormData>(form.formState.errors);
 
   const onSubmit = async (values: z.infer<typeof insertListSchema>) => {
-    const [_, error] = await createList(values);
+    const [_, error] = await createList(values, userId as string);
     if (error) {
       form.setError('root', { message: error });
       return console.error('Error creating todo:', error);

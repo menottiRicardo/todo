@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const session = await auth();
@@ -24,7 +24,12 @@ export default async function Home() {
   const [todos, error] = await getTodos(user.id as string);
 
   if (error) {
-    return null;
+    return (
+      <div>
+        Something went wrong while fetching the todos, please refresh the page
+        or <span className='underline cursor-pointer'>contact support</span>
+      </div>
+    );
   }
   return (
     <div>

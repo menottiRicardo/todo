@@ -67,9 +67,6 @@ export const todos = pgTable('todo', {
   listId: uuid('listId')
     .notNull()
     .references(() => lists.id, { onDelete: 'cascade' }),
-  userId: text('userId')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   description: text('description'),
   isRecurring: boolean('isRecurring').default(false),
@@ -78,7 +75,6 @@ export const todos = pgTable('todo', {
   updatedAt: timestamp('updatedAt', { mode: 'date' }).defaultNow(),
 });
 
-// export const insertTodoSchema = createInsertSchema(todos);
 
 export const insertTodoSchema = createInsertSchema(todos, {
   name: (schema) => schema.name.min(2).max(50),
@@ -86,15 +82,28 @@ export const insertTodoSchema = createInsertSchema(todos, {
 
 export const lists = pgTable('list', {
   id: uuid('uuid').notNull().primaryKey().defaultRandom(),
-  userId: text('userId')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
+  ownerId: uuid('ownerId')
 });
 
 export const insertListSchema = createInsertSchema(lists, {
   title: (schema) => schema.title.min(2).max(50),
 });
+
+export const userListLink = pgTable(
+  'userListLink',
+  {
+    userId: text('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    listId: uuid('listId')
+      .notNull()
+      .references(() => lists.id, { onDelete: 'cascade' }),
+  },
+  (link) => ({
+    primaryKey: primaryKey(link.userId, link.listId), // Compound primary key
+  })
+);
 
 export const taskCompletions = pgTable('taskCompletion', {
   todoId: uuid('todoId').notNull().references(() => todos.id, { onDelete: 'cascade' }),
