@@ -61,6 +61,9 @@ export function Task({
   };
   return (
     <>
+      <div className="fixed z-[-10] top-0 w-full h-full">
+        {isExploding && <Confetti width={width} height={height} />}
+      </div>
       <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
         <Checkbox
           checked={isCompleted}
@@ -79,7 +82,6 @@ export function Task({
           <Badge variant="outline">#{list.title}</Badge>
         </div>
       </div>
-      {isExploding && <Confetti width={width} height={height} />}
     </>
   );
 }

@@ -1,9 +1,10 @@
 'use server';
 
 import db from '@/lib/db';
-import { lists, userListLink } from '@/lib/db/schema';
+import { lists, userListLink, users } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { List } from './types';
+import GenerateDefault from '../todos/generate-default';
 
 /**
  * Fetches all lists associated with the specified user ID.
@@ -15,13 +16,17 @@ export const getUserLists = async (
   userId: string
 ): Promise<[List[], string | null]> => {
   try {
+    const user = await db.select().from(users).where(eq(users.id, userId));
+    if (!user[0].verified) {
+      await GenerateDefault(userId);
+    }
     const data = await db
       .select({ id: lists.id, title: lists.title, ownerId: lists.ownerId })
       .from(lists)
       .leftJoin(userListLink, eq(lists.id, userListLink.listId))
       .where(eq(userListLink.userId, userId));
     return [data, null];
-  } catch (error:any) {
+  } catch (error: any) {
     console.error('Error fetching lists:', error);
     return [[], error.message];
   }

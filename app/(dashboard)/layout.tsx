@@ -70,7 +70,7 @@ export default async function DashboardLayout({
                     key={list.id}
                   >
                     <Link
-                      href={`lists/${list.id}`}
+                      href={`#`}
                       className="flex items-center gap-3"
                     >
                       <Hash className="h-4 w-4" />

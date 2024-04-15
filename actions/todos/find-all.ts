@@ -3,9 +3,10 @@
 import db from '@/lib/db';
 import { and, eq, gte, lt, notExists } from 'drizzle-orm';
 import { TaskCompletion, Todo } from './types';
-import { lists, taskCompletions, todos, userListLink } from '@/lib/db/schema';
+import { lists, taskCompletions, todos, userListLink, users } from '@/lib/db/schema';
 import dayjs from 'dayjs';
 import { List } from '../lists/types';
+import GenerateDefault from './generate-default';
 
 export interface TodoWithList {
   todo: Todo;
@@ -52,15 +53,7 @@ export const getTodos = async (
     const tomorrowTodos: TodoWithList[] = [];
 
     data.forEach((item) => {
-      console.log(
-        item.todo.dueDate,
-        today.toDate(),
-        today.isSame(item.todo.dueDate),
-        today.isSame(dayjs(item.todo.dueDate)),
-        today.toDate() === item.todo.dueDate
-      );
       if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {
-        console.log('pushing', item);
         todayTodos.push({ todo: item.todo, list: item.list });
       } else {
         tomorrowTodos.push({ todo: item.todo, list: item.list });
