@@ -7,7 +7,7 @@ This is early development version. I am currently considering:
 - [x] Edit Task 
 - [x] Complete Tasks
 - [x] Ability to handle lists
-- [ ] Due dates with recurrence
+- [x] Due dates with recurrence
 - [ ] Dnd
 - [ ] Slider
 - [ ] Support for MDx
