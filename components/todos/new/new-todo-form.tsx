@@ -37,6 +37,7 @@ export default function NewTodoForm({
       dueDate: todo?.dueDate || undefined,
       listId: todo?.listId || undefined,
       ownerId: userId as string,
+      isRecurring: todo?.isRecurring || false,
     },
   });
 
@@ -114,6 +115,8 @@ export default function NewTodoForm({
           <DueDateDropdown
             setDueDate={(date: Date) => form.setValue('dueDate', date)}
             dueDate={form.watch('dueDate')}
+            setRecurrent={() => form.setValue('isRecurring', true)}
+            isRecurring={form.watch('isRecurring') ?? false}
           />
           <ListsComboBox
             lists={lists}

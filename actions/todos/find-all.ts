@@ -56,10 +56,22 @@ export const getTodos = async (
         )
       );
 
+    const recurrent = await db
+      .select()
+      .from(todos)
+      .innerJoin(lists, eq(lists.id, todos.listId))
+      .innerJoin(userListLink, eq(userListLink.listId, lists.id))
+      .where(
+        and(
+          eq(userListLink.userId, userId),
+          notExists(pendingTasksQuery),
+          eq(todos.isRecurring, true)
+        )
+      );
+
     // separate data by dates
     const todayTodos: TodoWithList[] = [];
     const tomorrowTodos: TodoWithList[] = [];
-
 
     data.forEach((item) => {
       if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {
@@ -67,6 +79,10 @@ export const getTodos = async (
       } else {
         tomorrowTodos.push({ todo: item.todo, list: item.list });
       }
+    });
+
+    recurrent.forEach((item) => {
+      todayTodos.push({ todo: item.todo, list: item.list });
     });
 
     return [{ today: todayTodos, tomorrow: tomorrowTodos }, null];

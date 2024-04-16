@@ -28,6 +28,7 @@ const Tasks = ({
         id={item.todo.id}
         completed={completed}
         completionDate={item.taskCompletion?.completionDate}
+        isRecurring={item.todo.isRecurring}
       />
     </animated.div>
   ));

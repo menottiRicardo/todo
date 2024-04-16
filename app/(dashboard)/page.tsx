@@ -28,7 +28,6 @@ export default async function Home() {
     dayjs()
   );
 
-
   if (error) {
     return (
       <div>
@@ -87,6 +86,7 @@ export default async function Home() {
                     name={todo.todo.name}
                     list={todo.list}
                     id={todo.todo.id}
+                    isRecurring={false}
                     preview
                   />
                 ))

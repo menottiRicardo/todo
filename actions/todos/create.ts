@@ -12,11 +12,11 @@ import { z } from 'zod';
  */
 export const createTodo = async (todo: z.infer<typeof insertTodoSchema>) => {
   try {
-    const res = await db.insert(todos).values(todo)
+    const res = await db.insert(todos).values(todo).returning();
     revalidatePath('/');
     return [res, null];
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     return [null, error?.message];
   }
 };

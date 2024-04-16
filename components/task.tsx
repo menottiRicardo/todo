@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import TooltipWrapper from './ui/tooltip-wrapper';
+import { Repeat } from 'lucide-react';
 
 export function Task({
   name,
@@ -20,6 +21,7 @@ export function Task({
   completed = false,
   preview = false,
   completionDate,
+  isRecurring,
 }: {
   name: string;
   list: List;
@@ -28,6 +30,7 @@ export function Task({
   completed?: boolean;
   preview?: boolean;
   completionDate?: Date;
+  isRecurring: boolean | null;
 }) {
   const [isCompleted, setIsCompleted] = useState(completed);
   const [isExploding, setIsExploding] = useState(false);
@@ -80,7 +83,20 @@ export function Task({
             <p className="text-light text-secondary py-2">{description}</p>
           )}
 
-          <Badge variant="outline">#{list.title}</Badge>
+          <div className="flex gap-2">
+            <Badge variant="outline">#{list.title}</Badge>
+            {isRecurring && (
+              <Badge variant="outline">
+                <Repeat className="w-3 h-3 mr-2" />
+                recurrent
+              </Badge>
+            )}
+            {isTaskCompleted && (
+              <Badge variant="default">
+                Completed {new Date(completionDate).toLocaleDateString()}
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
     </>
