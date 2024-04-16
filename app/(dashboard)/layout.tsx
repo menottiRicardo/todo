@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { getUserLists } from '@/actions/lists/find-all';
+import TooltipWrapper from '@/components/ui/tooltip-wrapper';
 
 export default async function DashboardLayout({
   children,
@@ -32,7 +33,7 @@ export default async function DashboardLayout({
     return null;
   }
   return (
-    <div className="grid min-h-screen w-full lg:grid-cols-[220px_1fr] xl:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen w-full xl:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 xl:block xl:w-72">
         <div className="flex h-full max-h-screen flex-col gap-2 fixed w-72">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
@@ -56,12 +57,14 @@ export default async function DashboardLayout({
 
               <div className="flex text-base justify-between items-center mt-4 mb-2 text-secondary/80">
                 <span>My Lists</span>
-                <Link
-                  href={'/lists/new'}
-                  className="cursor-pointer hover:text-primary ease-out duration-150"
-                >
-                  <ListPlus />
-                </Link>
+                <TooltipWrapper tooltip="Create new List">
+                  <Link
+                    href={'/lists/new'}
+                    className="cursor-pointer hover:text-primary ease-out duration-150"
+                  >
+                    <ListPlus />
+                  </Link>
+                </TooltipWrapper>
               </div>
               <Suspense fallback={<div>Loading...</div>}>
                 {lists.map((list) => (
@@ -70,7 +73,7 @@ export default async function DashboardLayout({
                     key={list.id}
                   >
                     <Link
-                      href={`#`}
+                      href={`/lists/${list.id}`}
                       className="flex items-center gap-3"
                     >
                       <Hash className="h-4 w-4" />
@@ -82,12 +85,14 @@ export default async function DashboardLayout({
                       )}
                     </Link>
                     <div className="hidden group-hover:inline">
-                      <Link
-                        href={`/lists/invite/${list.id}`}
-                        className="flex items-center gap-3"
-                      >
-                        <Share2 className="h-4 w-4 cursor-pointer" />
-                      </Link>
+                      <TooltipWrapper tooltip="Share List">
+                        <Link
+                          href={`/lists/invite/${list.id}`}
+                          className="flex items-center gap-3"
+                        >
+                          <Share2 className="h-4 w-4 cursor-pointer" />
+                        </Link>
+                      </TooltipWrapper>
                     </div>
                   </div>
                 ))}

@@ -1,20 +1,16 @@
 import { getTodos } from '@/actions/todos/find-all';
+import seedDB from '@/actions/todos/seed-db';
 import { Task } from '@/components/task';
 import Tasks from '@/components/tasks';
+import NoTodos from '@/components/todos/no-todos';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
 import { getTimeOfDay } from '@/lib/utils';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-
 
 export default async function Home() {
   const session = await auth();
@@ -27,9 +23,12 @@ export default async function Home() {
   const timeOfDay = getTimeOfDay();
   const todayDate = dayjs().format('ddd D MMMM YYYY');
 
-  const [{ today, tomorrow }, error] = await getTodos(user.id as string, dayjs());
+  const [{ today, tomorrow }, error] = await getTodos(
+    user.id as string,
+    dayjs()
+  );
 
-  // console.log(today, tomorrow);
+
   if (error) {
     return (
       <div>
@@ -65,7 +64,7 @@ export default async function Home() {
             {today.length > 0 ? (
               <Tasks tasks={today} />
             ) : (
-              <p>Congrats!, there s nothing more to do.</p>
+              <NoTodos userId={user.id as string} />
             )}
           </div>
         </Suspense>

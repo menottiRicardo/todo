@@ -13,6 +13,7 @@ import { createTodo } from '@/actions/todos/create';
 import { List } from '@/actions/lists/types';
 import { Todo } from '@/actions/todos/types';
 import { updateTodo } from '@/actions/todos/update';
+import { useToast } from '@/components/ui/use-toast';
 
 export interface FormData extends z.infer<typeof insertTodoSchema> {
   dueDate: Date | undefined;
@@ -27,6 +28,7 @@ export default function NewTodoForm({
   todo?: Todo;
 }) {
   const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<FormData>({
     resolver: zodResolver(insertTodoSchema),
     defaultValues: {
@@ -43,6 +45,10 @@ export default function NewTodoForm({
   const onSubmit = async (values: z.infer<typeof insertTodoSchema>) => {
     if (todo) {
       const [_, updateError] = await updateTodo(values, todo.id);
+      toast({
+        title: 'Todo updated',
+        description: `Todo "${values.name}" was successfully updated.`,
+      });
       router.back();
       if (updateError) {
         form.setError('root', { message: updateError });
@@ -50,6 +56,10 @@ export default function NewTodoForm({
       }
     } else {
       const [_, error] = await createTodo(values);
+      toast({
+        title: 'Todo created',
+        description: `Todo "${values.name}" was successfully created.`,
+      });
       router.back();
       if (error) {
         form.setError('root', { message: error });

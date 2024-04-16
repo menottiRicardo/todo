@@ -10,6 +10,7 @@ import { unCompleteTask } from '@/actions/todos/unmark-completed';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import TooltipWrapper from './ui/tooltip-wrapper';
 
 export function Task({
   name,

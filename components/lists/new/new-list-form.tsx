@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
 import useFormErrors from '@/hooks/useFormErrors';
 import { createList } from '@/actions/lists/create';
+import { useToast } from '@/components/ui/use-toast';
 
 export interface FormData extends z.infer<typeof insertListSchema> {
   dueDate: Date | undefined;
@@ -18,6 +19,7 @@ export default function NewListForm({
   userId: string | undefined;
 }) {
   const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<FormData>({
     resolver: zodResolver(insertListSchema),
     defaultValues: {
@@ -30,6 +32,10 @@ export default function NewListForm({
 
   const onSubmit = async (values: z.infer<typeof insertListSchema>) => {
     const [_, error] = await createList(values, userId as string);
+    toast({
+      title: 'List created',
+      description: `List "${values.title}" was successfully created.`,
+    });
     if (error) {
       form.setError('root', { message: error });
       return console.error('Error creating todo:', error);

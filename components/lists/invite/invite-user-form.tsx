@@ -9,6 +9,7 @@ import { useState } from 'react';
 import UsersComboBox from './users-combo-box';
 import UserAvatar from './user-avatar';
 import { inviteToList } from '@/actions/lists/invite';
+import { useToast } from '@/components/ui/use-toast';
 
 export interface FormData {
   selectedUsersIds: string[];
@@ -23,6 +24,7 @@ export default function InviteUserForm({
   users: User[];
 }) {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const { toast } = useToast();
   const router = useRouter();
   const form = useForm<FormData>({
     defaultValues: {
@@ -34,6 +36,10 @@ export default function InviteUserForm({
 
   const onSubmit = async (values: FormData) => {
     const [_, error] = await inviteToList(values.selectedUsersIds, listId);
+    toast({
+      title: 'Success!',
+      description: `User(s) invited successfully.`,
+    });
     if (error) {
       form.setError('root', { message: error });
       return console.error('Error creating todo:', error);

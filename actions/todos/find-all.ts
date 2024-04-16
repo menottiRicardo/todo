@@ -12,7 +12,7 @@ import {
 } from '@/lib/db/schema';
 import dayjs from 'dayjs';
 import { List } from '../lists/types';
-import GenerateDefaultTodos from './generate-default';
+import GenerateDefaultTodos from './seed-db';
 import { revalidatePath } from 'next/cache';
 
 export interface TodoWithList {
@@ -34,7 +34,7 @@ export const getTodos = async (
   [{ today: TodoWithList[]; tomorrow: TodoWithList[] }, string | null]
 > => {
   today = today.startOf('day');
-  const dayAfterTomorrow = today.add(1, 'day');
+  const dayAfterTomorrow = today.add(2, 'day');
 
   try {
     const pendingTasksQuery = db
@@ -55,17 +55,11 @@ export const getTodos = async (
           lt(todos.dueDate, dayAfterTomorrow.toDate())
         )
       );
-    if (data.length === 0) {
-      const user = await db.select().from(users).where(eq(users.id, userId));
-      if (!user[0].verified) {
-        const res = (await GenerateDefaultTodos(userId)) as any;
-        return res;
-      }
-    }
 
     // separate data by dates
     const todayTodos: TodoWithList[] = [];
     const tomorrowTodos: TodoWithList[] = [];
+
 
     data.forEach((item) => {
       if (areDatesEqual(today.toDate(), item.todo.dueDate as Date)) {

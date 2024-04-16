@@ -12,12 +12,28 @@ import { and, eq, gte, lt, notExists } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { TodoWithList } from './find-all';
 
-export default async function GenerateDefaultTodos(userId: string) {
+export default async function seedDB(userId: string) {
   try {
+    const user = await db.select().from(users).where(eq(users.id, userId));
+    if (user[0].verified) {
+      throw new Error('db seeded');
+    }
     const defaultList = await db
-      .select()
-      .from(lists)
-      .where(eq(lists.ownerId, userId));
+      .insert(lists)
+      .values({
+        title: 'Default',
+        ownerId: userId,
+      })
+      .returning();
+
+    await db.insert(userListLink).values({
+      userId: userId as string,
+      listId: defaultList[0].id,
+    });
+
+    await db
+      .insert(userListLink)
+      .values([{ userId, listId: 'eafa322e-6f4e-499a-8d04-ec2da7e256d8' }]);
 
     const today = dayjs();
     const dayAfterTomorrow = today.add(1, 'day');
@@ -70,9 +86,10 @@ export default async function GenerateDefaultTodos(userId: string) {
       }
     });
     revalidatePath('/');
-    return [{ today: todayTodos, tomorrow: tomorrowTodos }, null];
+    await db.update(users).set({ verified: true }).where(eq(users.id, userId));
+    return [true, null];
   } catch (error: any) {
-    return [{ today: [], tomorrow: [] }, error?.message];
+    return [false, error?.message];
   }
 }
 

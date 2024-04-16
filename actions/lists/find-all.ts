@@ -22,15 +22,6 @@ export const getUserLists = async (
       .leftJoin(userListLink, eq(lists.id, userListLink.listId))
       .where(eq(userListLink.userId, userId));
 
-    if (data.length === 0) {
-      await GenerateDefaultLists(userId);
-      const data = await db
-        .select({ id: lists.id, title: lists.title, ownerId: lists.ownerId })
-        .from(lists)
-        .leftJoin(userListLink, eq(lists.id, userListLink.listId))
-        .where(eq(userListLink.userId, userId));
-      return [data, null];
-    }
     return [data, null];
   } catch (error: any) {
     console.error('Error fetching lists:', error);
