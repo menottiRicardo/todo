@@ -1,6 +1,7 @@
 import { getCompletedTodos } from '@/actions/todos/get-completed';
-import { Task } from '@/components/task';
-import Tasks from '@/components/tasks';
+import { Task } from '@/components/todos/task';
+import TaskSkeleton from '@/components/todos/task-skeleton';
+import Tasks from '@/components/todos/tasks';
 import { auth } from '@/lib/auth';
 import { getTimeOfDay } from '@/lib/utils';
 import dayjs from 'dayjs';
@@ -43,7 +44,7 @@ export default async function Home() {
           </h3>
         </div>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<TaskSkeleton />}>
         <div id="tasks-container" className="mt-10 flex flex-col gap-4">
           {completedTodos.length > 0 ? (
             <Tasks tasks={completedTodos} completed />

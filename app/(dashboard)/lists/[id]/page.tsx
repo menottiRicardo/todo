@@ -1,5 +1,5 @@
 import { getTodosByList } from '@/actions/todos/find-all-by-list';
-import Tasks from '@/components/tasks';
+import Tasks from '@/components/todos/tasks';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';

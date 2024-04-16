@@ -1,7 +1,7 @@
 import { getTodos } from '@/actions/todos/find-all';
 import seedDB from '@/actions/todos/seed-db';
-import { Task } from '@/components/task';
-import Tasks from '@/components/tasks';
+import { Task } from '@/components/todos/task';
+import Tasks from '@/components/todos/tasks';
 import NoTodos from '@/components/todos/no-todos';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
+import TaskSkeleton from '@/components/todos/task-skeleton';
 
 export default async function Home() {
   const session = await auth();
@@ -58,7 +59,7 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<TaskSkeleton />}>
           <div id="tasks-container" className="mt-10 flex flex-col gap-4">
             {today.length > 0 ? (
               <Tasks tasks={today} />

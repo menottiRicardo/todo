@@ -1,6 +1,6 @@
 'use client';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from './ui/badge';
+import { Badge } from '../ui/badge';
 import { completeTask } from '@/actions/todos/mark-completed';
 import { useState } from 'react';
 import useWindowSize from 'react-use/lib/useWindowSize';
@@ -10,7 +10,7 @@ import { unCompleteTask } from '@/actions/todos/unmark-completed';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import TooltipWrapper from './ui/tooltip-wrapper';
+import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Repeat } from 'lucide-react';
 
 export function Task({
@@ -83,7 +83,7 @@ export function Task({
             <p className="text-light text-secondary py-2">{description}</p>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 mt-2">
             <Badge variant="outline">#{list.title}</Badge>
             {isRecurring && (
               <Badge variant="outline">
