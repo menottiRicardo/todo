@@ -14,10 +14,13 @@ export const completeTask = async (todoId: string) => {
   const today = new Date();
 
   try {
-    const res = await db.insert(taskCompletions).values({
-      todoId,
-      completionDate: today,
-    });
+    const res = await db
+      .insert(taskCompletions)
+      .values({
+        todoId,
+        completionDate: today,
+      })
+      .returning();
     revalidatePath('/');
     return [res, null];
   } catch (error: any) {

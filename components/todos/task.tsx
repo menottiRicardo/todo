@@ -3,15 +3,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '../ui/badge';
 import { completeTask } from '@/actions/todos/mark-completed';
 import { useState } from 'react';
-import useWindowSize from 'react-use/lib/useWindowSize';
-import Confetti from 'react-confetti';
 import { List } from '@/actions/lists/types';
 import { unCompleteTask } from '@/actions/todos/unmark-completed';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import TooltipWrapper from '../ui/tooltip-wrapper';
 import { Repeat } from 'lucide-react';
+import { useConfetti } from '../confetti-provider';
 
 export function Task({
   name,
@@ -33,8 +30,7 @@ export function Task({
   isRecurring: boolean | null;
 }) {
   const [isCompleted, setIsCompleted] = useState(completed);
-  const [isExploding, setIsExploding] = useState(false);
-  const { width, height } = useWindowSize();
+  const { toggle: toggleConfetti } = useConfetti();
 
   const router = useRouter();
 
@@ -55,8 +51,10 @@ export function Task({
       return;
     }
     setIsCompleted(true);
-    setIsExploding(true);
-    setTimeout(async () => await completeTask(id), 1000);
+    toggleConfetti();
+    setTimeout(async () => {
+      completeTask(id).then(() => toggleConfetti());
+    }, 500);
   };
 
   const handleNavigation = () => {
@@ -65,9 +63,7 @@ export function Task({
   };
   return (
     <>
-      <div className="fixed z-[-10] top-0 w-full h-full">
-        {isExploding && <Confetti width={width} height={height} />}
-      </div>
+      <div className="fixed z-[-10] top-0 w-full h-full"></div>
       <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
         <Checkbox
           checked={isCompleted}
